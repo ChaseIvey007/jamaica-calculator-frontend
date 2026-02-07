@@ -11,252 +11,126 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
-            --jm-green: #009B3A;
-            --jm-gold: #FED100;
-            --primary: var(--jm-green);
-            --primary-dark: #007A2E;
-            --accent: var(--jm-gold);
-            --dark: #0A0F14;
-            --surface: #FFFFFF;
-            --surface-alt: #F8F9FA;
-            --border: #E4E7EB;
-            --border-dark: #CBD2D9;
-            --text-primary: #1A1D23;
-            --text-secondary: #505867;
-            --text-tertiary: #9DA4AE;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 8px rgba(0,0,0,0.06);
-            --shadow-lg: 0 12px 24px rgba(0,0,0,0.08);
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 14px;
-            --radius-xl: 18px;
-            --font-sans: 'Inter', -apple-system, system-ui, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --jm-green: #009B3A; --jm-gold: #FED100; --primary: var(--jm-green); --primary-dark: #007A2E;
+            --accent: var(--jm-gold); --dark: #0A0F14; --surface: #FFFFFF; --surface-alt: #F8F9FA;
+            --border: #E4E7EB; --border-dark: #CBD2D9; --text-primary: #1A1D23; --text-secondary: #505867;
+            --text-tertiary: #9DA4AE; --shadow-sm: 0 1px 2px rgba(0,0,0,0.04); --shadow-md: 0 4px 8px rgba(0,0,0,0.06);
+            --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 18px;
+            --font-sans: 'Inter', -apple-system, system-ui, sans-serif; --font-mono: 'JetBrains Mono', monospace;
         }
-
-        body {
-            font-family: var(--font-sans);
-            background: linear-gradient(180deg, #F1F5F9 0%, #FFFFFF 100%);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
+        body { font-family: var(--font-sans); background: linear-gradient(180deg, #F1F5F9 0%, #FFFFFF 100%); color: var(--text-primary); line-height: 1.6; min-height: 100vh; }
         .app-container { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem; }
-
         .header { text-align: center; margin-bottom: 2rem; }
         .logo { width: 180px; margin-bottom: 1rem; }
-        h1 { font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+        h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
         .subtitle { font-size: 1rem; color: var(--text-secondary); }
-        .badge-official {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            background: rgba(0, 155, 58, 0.1); color: var(--primary);
-            padding: 0.5rem 1rem; border-radius: 100px;
-            font-size: 0.8125rem; font-weight: 600; margin-top: 1rem;
-        }
-
-        .tab-nav {
-            display: flex; gap: 0.5rem; margin-bottom: 2rem;
-            background: var(--surface); padding: 0.5rem;
-            border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border);
-        }
-        .tab-btn {
-            flex: 1; padding: 0.875rem 1.5rem; border: none; background: transparent;
-            border-radius: var(--radius-md); font-family: var(--font-sans);
-            font-size: 0.9375rem; font-weight: 600; color: var(--text-secondary);
-            cursor: pointer; transition: all 0.2s;
-        }
+        .badge-official { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 155, 58, 0.1); color: var(--primary); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8125rem; font-weight: 600; margin-top: 1rem; }
+        .tab-nav { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: var(--surface); padding: 0.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+        .tab-btn { flex: 1; padding: 0.875rem 1.5rem; border: none; background: transparent; border-radius: var(--radius-md); font-family: var(--font-sans); font-size: 0.9375rem; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
         .tab-btn:hover { color: var(--text-primary); background: var(--surface-alt); }
         .tab-btn.active { background: var(--primary); color: white; }
-
         .calculator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         @media (max-width: 1024px) { .calculator-grid { grid-template-columns: 1fr; } }
-
-        .card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-md);
-        }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-md); }
         .card-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
         .card-title { font-size: 1.125rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-
         .form-grid { display: grid; gap: 1.25rem; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
-        @media (max-width: 640px) { .form-row, .form-row-3 { grid-template-columns: 1fr; } }
+        @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
         .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-
-        label {
-            font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 0.03em;
-        }
-        input, select {
-            font-family: var(--font-sans); font-size: 0.9375rem;
-            padding: 0.75rem 1rem; border: 1.5px solid var(--border);
-            border-radius: var(--radius-md); background: var(--surface);
-            color: var(--text-primary); transition: all 0.2s; width: 100%;
-        }
-        input:focus, select:focus {
-            outline: none; border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 155, 58, 0.1);
-        }
-
+        label { font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+        input, select { font-family: var(--font-sans); font-size: 0.9375rem; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); background: var(--surface); color: var(--text-primary); transition: all 0.2s; width: 100%; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 155, 58, 0.1); }
         .input-wrapper { position: relative; }
-        .input-prefix {
-            position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-            color: var(--text-tertiary); font-weight: 500;
-        }
+        .input-prefix { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); font-weight: 500; }
         .input-wrapper input { padding-left: 2.25rem; }
-        .input-suffix {
-            position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
-            color: var(--text-tertiary); font-size: 0.875rem;
-        }
-
-        .toggle-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-        .toggle-option {
-            display: flex; align-items: center; gap: 0.5rem;
-            padding: 0.625rem 1rem; border: 1.5px solid var(--border);
-            border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s;
-            font-size: 0.875rem; font-weight: 500; background: var(--surface);
-        }
+        .toggle-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .toggle-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; font-size: 0.875rem; font-weight: 500; background: var(--surface); }
         .toggle-option:hover { border-color: var(--border-dark); }
         .toggle-option.active { border-color: var(--primary); background: rgba(0, 155, 58, 0.05); color: var(--primary); }
         .toggle-option input { display: none; }
-
-        .btn {
-            font-family: var(--font-sans); font-size: 1rem; font-weight: 600;
-            padding: 1rem 2rem; border: none; border-radius: var(--radius-md);
-            cursor: pointer; transition: all 0.2s; width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-        }
+        .btn { font-family: var(--font-sans); font-size: 1rem; font-weight: 600; padding: 1rem 2rem; border: none; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-sm); }
-        .btn-primary:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
         .results-section { margin-bottom: 1.5rem; }
-        .section-title {
-            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.05em; color: var(--text-tertiary); margin-bottom: 0.75rem;
-        }
-        .result-line {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.625rem 0; border-bottom: 1px solid var(--border);
-        }
+        .section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary); margin-bottom: 0.75rem; }
+        .result-line { display: flex; justify-content: space-between; align-items: center; padding: 0.625rem 0; border-bottom: 1px solid var(--border); }
         .result-line:last-child { border-bottom: none; }
         .result-label { font-size: 0.9375rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
         .result-value { font-family: var(--font-mono); font-size: 0.9375rem; font-weight: 500; color: var(--text-primary); }
-        .rate-tag {
-            font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 600;
-            padding: 0.125rem 0.5rem; background: var(--surface-alt);
-            border-radius: var(--radius-sm); color: var(--text-secondary);
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, var(--dark) 0%, #1A2530 100%);
-            color: white; padding: 1.5rem; border-radius: var(--radius-lg);
-            margin-top: 1.5rem; position: relative; overflow: hidden;
-        }
-        .highlight-box::before {
-            content: ''; position: absolute; top: -50px; right: -50px;
-            width: 150px; height: 150px;
-            background: radial-gradient(circle, rgba(0, 155, 58, 0.2) 0%, transparent 70%);
-        }
-        .highlight-label {
-            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
-            color: var(--accent); font-weight: 700; margin-bottom: 0.5rem;
-        }
+        .rate-tag { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 600; padding: 0.125rem 0.5rem; background: var(--surface-alt); border-radius: var(--radius-sm); color: var(--text-secondary); }
+        .highlight-box { background: linear-gradient(135deg, var(--dark) 0%, #1A2530 100%); color: white; padding: 1.5rem; border-radius: var(--radius-lg); margin-top: 1.5rem; }
+        .highlight-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; margin-bottom: 0.5rem; }
         .highlight-amount { font-family: var(--font-mono); font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; }
         .highlight-sub { font-size: 1rem; opacity: 0.7; font-family: var(--font-mono); }
-        .aggregate-badge {
-            display: inline-flex; align-items: center; gap: 0.375rem; margin-top: 1rem;
-            padding: 0.5rem 0.875rem; background: rgba(254, 209, 0, 0.15);
-            border-radius: 100px; font-size: 0.8125rem; font-weight: 600; color: var(--accent);
-        }
-
+        .aggregate-badge { display: inline-flex; align-items: center; gap: 0.375rem; margin-top: 1rem; padding: 0.5rem 0.875rem; background: rgba(254, 209, 0, 0.15); border-radius: 100px; font-size: 0.8125rem; font-weight: 600; color: var(--accent); }
         .empty-state { text-align: center; padding: 3rem 2rem; color: var(--text-tertiary); }
         .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
-
-        .spinner {
-            width: 40px; height: 40px; border: 3px solid var(--border);
-            border-top-color: var(--primary); border-radius: 50%;
-            animation: spin 0.8s linear infinite; margin: 2rem auto;
-        }
+        .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 2rem auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        .error-box {
-            background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B;
-            padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; font-size: 0.875rem;
-        }
-
-        .info-box {
-            background: rgba(0, 155, 58, 0.05); border: 1px solid rgba(0, 155, 58, 0.2);
-            color: var(--primary-dark); padding: 0.875rem 1rem; border-radius: var(--radius-md);
-            margin-bottom: 1.25rem; font-size: 0.8125rem; display: flex; align-items: flex-start; gap: 0.5rem;
-        }
-
-        .footer {
-            text-align: center; margin-top: 3rem; padding-top: 2rem;
-            border-top: 1px solid var(--border); color: var(--text-tertiary); font-size: 0.875rem;
-        }
+        .error-box { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem; font-size: 0.875rem; }
+        .info-box { background: rgba(0, 155, 58, 0.05); border: 1px solid rgba(0, 155, 58, 0.2); color: var(--primary-dark); padding: 0.875rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.8125rem; display: flex; align-items: flex-start; gap: 0.5rem; }
+        .footer { text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-tertiary); font-size: 0.875rem; }
         .footer a { color: var(--primary); text-decoration: none; }
-        .footer a:hover { text-decoration: underline; }
-
         .vehicle-type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
         @media (max-width: 900px) { .vehicle-type-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 640px) { .vehicle-type-grid { grid-template-columns: repeat(2, 1fr); } }
-
-        .vehicle-type-btn {
-            padding: 0.875rem 0.5rem; border: 1.5px solid var(--border); border-radius: var(--radius-md);
-            background: var(--surface); cursor: pointer; transition: all 0.2s;
-            text-align: center; font-size: 0.8125rem; font-weight: 500; color: var(--text-secondary);
-        }
+        .vehicle-type-btn { padding: 0.875rem 0.5rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); background: var(--surface); cursor: pointer; transition: all 0.2s; text-align: center; font-size: 0.8125rem; font-weight: 500; color: var(--text-secondary); }
         .vehicle-type-btn:hover { border-color: var(--border-dark); background: var(--surface-alt); }
         .vehicle-type-btn.active { border-color: var(--primary); background: rgba(0, 155, 58, 0.08); color: var(--primary); }
         .vehicle-type-btn .icon { font-size: 1.5rem; margin-bottom: 0.375rem; display: block; }
-
-        .ev-highlight {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            color: white; border-color: transparent;
-        }
-        .ev-highlight:hover { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+        .ev-highlight { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; border-color: transparent; }
         .ev-highlight.active { background: linear-gradient(135deg, #047857 0%, #065F46 100%); }
+        .freight-breakdown { background: var(--surface-alt); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-top: 0.5rem; font-size: 0.8125rem; }
+        .freight-breakdown-title { font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .freight-item { display: flex; justify-content: space-between; padding: 0.25rem 0; color: var(--text-tertiary); }
     </style>
 </head>
 <body>
     <div id="root"></div>
-
     <script type="text/babel">
         const { useState, useEffect } = React;
+        const API_URL = 'https://web-production-c0bd0.up.railway.app';
 
-        const API_URL = 'https://jamaica-calculator-backend-8810558932ca.herokuapp.com';
+        const SOURCE_COUNTRIES = [
+            { code: 'US', name: 'United States', flag: '🇺🇸' },
+            { code: 'UK', name: 'United Kingdom', flag: '🇬🇧' },
+            { code: 'JP', name: 'Japan', flag: '🇯🇵' },
+            { code: 'CN', name: 'China', flag: '🇨🇳' },
+            { code: 'DE', name: 'Germany', flag: '🇩🇪' },
+            { code: 'CA', name: 'Canada', flag: '🇨🇦' },
+            { code: 'AE', name: 'UAE', flag: '🇦🇪' },
+            { code: 'KR', name: 'South Korea', flag: '🇰🇷' },
+            { code: 'PA', name: 'Panama', flag: '🇵🇦' },
+            { code: 'TT', name: 'Trinidad & Tobago', flag: '🇹🇹' }
+        ];
 
         const VEHICLE_TYPES = [
-            { id: 'motor_car', name: 'Car / SUV', icon: '🚗', requiresCC: true },
-            { id: 'pickup', name: 'Pickup', icon: '🛻', requiresWeight: true },
-            { id: 'truck', name: 'Truck', icon: '🚚', requiresWeight: true },
-            { id: 'bus', name: 'Bus', icon: '🚌', requiresSeats: true },
-            { id: 'panel_van', name: 'Van', icon: '🚐', requiresWeight: true },
+            { id: 'motor_car', name: 'Car / SUV', icon: '🚗', requiresCC: true, requiresWeight: false },
+            { id: 'pickup', name: 'Pickup', icon: '🛻', requiresCC: true, requiresWeight: true },
+            { id: 'truck', name: 'Truck', icon: '🚚', requiresCC: true, requiresWeight: true },
+            { id: 'bus', name: 'Bus', icon: '🚌', requiresCC: true, requiresSeats: true },
+            { id: 'panel_van', name: 'Van', icon: '🚐', requiresCC: true, requiresWeight: true },
             { id: 'motorcycle', name: 'Motorcycle', icon: '🏍️', requiresCC: true },
             { id: 'limousine', name: 'Limousine', icon: '🚙', requiresCC: true },
-            { id: 'hearse', name: 'Hearse', icon: '⚰️', requiresWeight: true },
-            { id: 'tractor_head', name: 'Tractor Head', icon: '🚛', requiresWeight: false },
-            { id: 'special_purpose', name: 'Special Purpose', icon: '🚒', requiresWeight: false },
-            { id: 'hybrid', name: 'Hybrid', icon: '🔋', isGreen: true },
+            { id: 'hearse', name: 'Hearse', icon: '⚰️', requiresCC: true, requiresWeight: true },
+            { id: 'tractor_head', name: 'Tractor Head', icon: '🚛', requiresCC: true },
+            { id: 'special_purpose', name: 'Special Purpose', icon: '🚒', requiresCC: true },
+            { id: 'hybrid', name: 'Hybrid', icon: '🔋', requiresCC: true, isGreen: true },
             { id: 'electric', name: 'Electric', icon: '⚡', isGreen: true },
         ];
 
-        const formatCurrency = (value, currency = 'JMD') => {
-            const formatted = new Intl.NumberFormat('en-JM', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(value);
-            return `${currency} $${formatted}`;
-        };
+        const VEHICLE_SHIPPING = [
+            { id: 'roro', name: 'RoRo', icon: '🚢' },
+            { id: 'container_20ft', name: '20ft Container', icon: '📦' },
+            { id: 'container_40ft', name: '40ft Container', icon: '📦' }
+        ];
+
+        const formatCurrency = (v, c = 'JMD') => c + ' $' + new Intl.NumberFormat('en-JM', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
 
         function App() {
             const [activeTab, setActiveTab] = useState('vehicle');
@@ -265,139 +139,68 @@
             const [result, setResult] = useState(null);
             const [categories, setCategories] = useState([]);
 
-            // Vehicle form state
             const [vehicleForm, setVehicleForm] = useState({
-                fob_usd: '',
-                weight_kg: '',
-                vehicle_type: 'motor_car',
-                fuel_type: 'gas',
-                engine_cc: '',
-                passenger_seats: '',
-                is_new: true,
-                is_franchise: false,
-                motorcycle_purpose: 'leisure',
-                shipping_method: 'sea'
+                fob_usd: '', origin_country: 'US', vehicle_type: 'motor_car', fuel_type: 'gas',
+                engine_cc: '', unladen_weight_kg: '', passenger_seats: '', is_new: true,
+                is_franchise: false, motorcycle_purpose: 'leisure', vehicle_shipping_method: 'roro'
             });
 
-            // Goods form state
             const [goodsForm, setGoodsForm] = useState({
-                fob_usd: '',
-                weight_kg: '',
-                category: 'general',
-                shipping_method: 'air'
+                fob_usd: '', weight_kg: '', origin_country: 'US', category: 'general', shipping_method: 'air'
             });
 
             useEffect(() => {
-                fetch(`${API_URL}/categories`)
-                    .then(res => res.json())
-                    .then(data => setCategories(data.categories || []))
-                    .catch(err => console.error('Failed to load categories:', err));
+                fetch(API_URL + '/categories').then(r => r.json()).then(d => setCategories(d.categories || [])).catch(console.error);
             }, []);
 
             const handleVehicleChange = (e) => {
-                const { name, value, type } = e.target;
-                setVehicleForm(prev => ({
-                    ...prev,
-                    [name]: type === 'checkbox' ? e.target.checked : value
-                }));
+                const { name, value } = e.target;
+                setVehicleForm(p => ({ ...p, [name]: value }));
             };
 
             const handleGoodsChange = (e) => {
                 const { name, value } = e.target;
-                setGoodsForm(prev => ({ ...prev, [name]: value }));
-            };
-
-            const selectVehicleType = (typeId) => {
-                setVehicleForm(prev => ({ ...prev, vehicle_type: typeId }));
+                setGoodsForm(p => ({ ...p, [name]: value }));
             };
 
             const handleVehicleSubmit = async (e) => {
                 e.preventDefault();
-                setLoading(true);
-                setError(null);
-
+                setLoading(true); setError(null);
                 const vType = VEHICLE_TYPES.find(v => v.id === vehicleForm.vehicle_type);
-
                 const payload = {
                     fob_usd: parseFloat(vehicleForm.fob_usd),
-                    weight_kg: parseFloat(vehicleForm.weight_kg) || 1500,
-                    category: 'vehicle',
-                    shipping_method: vehicleForm.shipping_method,
-                    vehicle_type: vehicleForm.vehicle_type,
-                    fuel_type: vehicleForm.fuel_type,
-                    is_new: vehicleForm.is_new,
-                    is_franchise: vehicleForm.is_franchise
+                    weight_kg: vType?.requiresWeight ? parseFloat(vehicleForm.unladen_weight_kg) : 1500,
+                    category: 'vehicle', shipping_method: 'sea',
+                    origin_country: vehicleForm.origin_country, vehicle_type: vehicleForm.vehicle_type,
+                    fuel_type: vehicleForm.fuel_type, is_new: vehicleForm.is_new,
+                    is_franchise: vehicleForm.is_franchise, vehicle_shipping_method: vehicleForm.vehicle_shipping_method
                 };
-
-                if (vType?.requiresCC && vehicleForm.engine_cc) {
-                    payload.engine_cc = parseInt(vehicleForm.engine_cc);
-                }
-                if (vType?.requiresSeats && vehicleForm.passenger_seats) {
-                    payload.passenger_seats = parseInt(vehicleForm.passenger_seats);
-                }
-                if (vehicleForm.vehicle_type === 'motorcycle') {
-                    payload.motorcycle_purpose = vehicleForm.motorcycle_purpose;
-                }
+                if (vehicleForm.engine_cc) payload.engine_cc = parseInt(vehicleForm.engine_cc);
+                if (vType?.requiresSeats && vehicleForm.passenger_seats) payload.passenger_seats = parseInt(vehicleForm.passenger_seats);
+                if (vehicleForm.vehicle_type === 'motorcycle') payload.motorcycle_purpose = vehicleForm.motorcycle_purpose;
 
                 try {
-                    const response = await fetch(`${API_URL}/calculate`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail || 'Calculation failed');
-                    }
-
-                    const data = await response.json();
-                    setResult(data);
-                } catch (err) {
-                    setError(err.message);
-                } finally {
-                    setLoading(false);
-                }
+                    const res = await fetch(API_URL + '/calculate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error((await res.json()).detail || 'Failed');
+                    setResult(await res.json());
+                } catch (err) { setError(err.message); } finally { setLoading(false); }
             };
 
             const handleGoodsSubmit = async (e) => {
                 e.preventDefault();
-                setLoading(true);
-                setError(null);
-
+                setLoading(true); setError(null);
                 const payload = {
-                    fob_usd: parseFloat(goodsForm.fob_usd),
-                    weight_kg: parseFloat(goodsForm.weight_kg),
-                    category: goodsForm.category,
-                    shipping_method: goodsForm.shipping_method
+                    fob_usd: parseFloat(goodsForm.fob_usd), weight_kg: parseFloat(goodsForm.weight_kg),
+                    category: goodsForm.category, shipping_method: goodsForm.shipping_method, origin_country: goodsForm.origin_country
                 };
-
                 try {
-                    const response = await fetch(`${API_URL}/calculate`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.detail || 'Calculation failed');
-                    }
-
-                    const data = await response.json();
-                    setResult(data);
-                } catch (err) {
-                    setError(err.message);
-                } finally {
-                    setLoading(false);
-                }
+                    const res = await fetch(API_URL + '/calculate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error((await res.json()).detail || 'Failed');
+                    setResult(await res.json());
+                } catch (err) { setError(err.message); } finally { setLoading(false); }
             };
 
             const currentVehicleType = VEHICLE_TYPES.find(v => v.id === vehicleForm.vehicle_type);
-
-            const effectiveRate = result && !result.is_de_minimis && result.fob_jmd > 0
-                ? ((result.total_taxes_fees_jmd / result.fob_jmd) * 100).toFixed(1)
-                : null;
 
             return (
                 <div className="app-container">
@@ -405,485 +208,212 @@
                         <img src="index.png" alt="TrueCost JA" className="logo" />
                         <h1>Jamaica Import Calculator</h1>
                         <p className="subtitle">Calculate duties, taxes & fees for Jamaica imports</p>
-                        <div className="badge-official">
-                            ✓ Based on Official 2025 Jamaica Customs Rates
-                        </div>
+                        <div className="badge-official">✓ Based on Official 2025 Jamaica Customs Rates</div>
                     </header>
 
                     <div className="tab-nav">
-                        <button
-                            className={`tab-btn ${activeTab === 'vehicle' ? 'active' : ''}`}
-                            onClick={() => { setActiveTab('vehicle'); setResult(null); }}
-                        >
-                            🚗 Vehicle Import
-                        </button>
-                        <button
-                            className={`tab-btn ${activeTab === 'goods' ? 'active' : ''}`}
-                            onClick={() => { setActiveTab('goods'); setResult(null); }}
-                        >
-                            📦 General Goods
-                        </button>
+                        <button className={'tab-btn ' + (activeTab === 'vehicle' ? 'active' : '')} onClick={() => { setActiveTab('vehicle'); setResult(null); }}>🚗 Vehicle Import</button>
+                        <button className={'tab-btn ' + (activeTab === 'goods' ? 'active' : '')} onClick={() => { setActiveTab('goods'); setResult(null); }}>📦 General Goods</button>
                     </div>
 
                     <div className="calculator-grid">
-                        {/* Input Form */}
                         <div className="card">
-                            <div className="card-header">
-                                <h2 className="card-title">
-                                    {activeTab === 'vehicle' ? '🚗 Vehicle Details' : '📦 Shipment Details'}
-                                </h2>
-                            </div>
+                            <div className="card-header"><h2 className="card-title">{activeTab === 'vehicle' ? '🚗 Vehicle Details' : '📦 Shipment Details'}</h2></div>
 
                             {activeTab === 'vehicle' ? (
                                 <form onSubmit={handleVehicleSubmit} className="form-grid">
-                                    {/* Vehicle Type Selection */}
                                     <div className="form-group">
                                         <label>Vehicle Type</label>
                                         <div className="vehicle-type-grid">
                                             {VEHICLE_TYPES.map(vt => (
-                                                <button
-                                                    key={vt.id}
-                                                    type="button"
-                                                    className={`vehicle-type-btn ${vehicleForm.vehicle_type === vt.id ? 'active' : ''} ${vt.isGreen ? 'ev-highlight' : ''}`}
-                                                    onClick={() => selectVehicleType(vt.id)}
-                                                >
-                                                    <span className="icon">{vt.icon}</span>
-                                                    {vt.name}
+                                                <button key={vt.id} type="button" className={'vehicle-type-btn ' + (vehicleForm.vehicle_type === vt.id ? 'active ' : '') + (vt.isGreen ? 'ev-highlight' : '')} onClick={() => setVehicleForm(p => ({ ...p, vehicle_type: vt.id }))}>
+                                                    <span className="icon">{vt.icon}</span>{vt.name}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
 
-                                    {/* FOB Value */}
                                     <div className="form-row">
+                                        <div className="form-group">
+                                            <label>Shipping From</label>
+                                            <select name="origin_country" value={vehicleForm.origin_country} onChange={handleVehicleChange}>
+                                                {SOURCE_COUNTRIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.name}</option>)}
+                                            </select>
+                                        </div>
                                         <div className="form-group">
                                             <label>FOB Value (USD)</label>
                                             <div className="input-wrapper">
                                                 <span className="input-prefix">$</span>
-                                                <input
-                                                    type="number"
-                                                    name="fob_usd"
-                                                    value={vehicleForm.fob_usd}
-                                                    onChange={handleVehicleChange}
-                                                    placeholder="15000"
-                                                    step="100"
-                                                    min="0"
-                                                    required
-                                                />
+                                                <input type="number" name="fob_usd" value={vehicleForm.fob_usd} onChange={handleVehicleChange} placeholder="15000" required />
                                             </div>
                                         </div>
-
-                                        {/* Fuel Type */}
-                                        {!['hybrid', 'electric', 'motorcycle'].includes(vehicleForm.vehicle_type) && (
-                                            <div className="form-group">
-                                                <label>Fuel Type</label>
-                                                <div className="toggle-group">
-                                                    <label className={`toggle-option ${vehicleForm.fuel_type === 'gas' ? 'active' : ''}`}>
-                                                        <input
-                                                            type="radio"
-                                                            name="fuel_type"
-                                                            value="gas"
-                                                            checked={vehicleForm.fuel_type === 'gas'}
-                                                            onChange={handleVehicleChange}
-                                                        />
-                                                        ⛽ Gas
-                                                    </label>
-                                                    <label className={`toggle-option ${vehicleForm.fuel_type === 'diesel' ? 'active' : ''}`}>
-                                                        <input
-                                                            type="radio"
-                                                            name="fuel_type"
-                                                            value="diesel"
-                                                            checked={vehicleForm.fuel_type === 'diesel'}
-                                                            onChange={handleVehicleChange}
-                                                        />
-                                                        🛢️ Diesel
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
 
-                                    {/* Conditional Fields based on vehicle type */}
+                                    {!['hybrid', 'electric', 'motorcycle'].includes(vehicleForm.vehicle_type) && (
+                                        <div className="form-group">
+                                            <label>Fuel Type</label>
+                                            <div className="toggle-group">
+                                                <label className={'toggle-option ' + (vehicleForm.fuel_type === 'gas' ? 'active' : '')}><input type="radio" name="fuel_type" value="gas" checked={vehicleForm.fuel_type === 'gas'} onChange={handleVehicleChange} />⛽ Gasoline</label>
+                                                <label className={'toggle-option ' + (vehicleForm.fuel_type === 'diesel' ? 'active' : '')}><input type="radio" name="fuel_type" value="diesel" checked={vehicleForm.fuel_type === 'diesel'} onChange={handleVehicleChange} />🛢️ Diesel</label>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="form-row">
-                                        {/* Engine CC for cars, limousines, motorcycles */}
                                         {currentVehicleType?.requiresCC && (
                                             <div className="form-group">
                                                 <label>Engine Size (CC)</label>
-                                                <input
-                                                    type="number"
-                                                    name="engine_cc"
-                                                    value={vehicleForm.engine_cc}
-                                                    onChange={handleVehicleChange}
-                                                    placeholder="1800"
-                                                    min="50"
-                                                    required
-                                                />
+                                                <input type="number" name="engine_cc" value={vehicleForm.engine_cc} onChange={handleVehicleChange} placeholder="1800" required />
                                             </div>
                                         )}
-
-                                        {/* Weight for pickups, trucks, vans */}
                                         {currentVehicleType?.requiresWeight && (
                                             <div className="form-group">
                                                 <label>Unladen Weight (KG)</label>
-                                                <input
-                                                    type="number"
-                                                    name="weight_kg"
-                                                    value={vehicleForm.weight_kg}
-                                                    onChange={handleVehicleChange}
-                                                    placeholder="1850"
-                                                    min="100"
-                                                    required
-                                                />
-                                            </div>
-                                        )}
-
-                                        {/* Passenger seats for buses */}
-                                        {currentVehicleType?.requiresSeats && (
-                                            <div className="form-group">
-                                                <label>Passenger Seats</label>
-                                                <input
-                                                    type="number"
-                                                    name="passenger_seats"
-                                                    value={vehicleForm.passenger_seats}
-                                                    onChange={handleVehicleChange}
-                                                    placeholder="25"
-                                                    min="10"
-                                                    required
-                                                />
+                                                <input type="number" name="unladen_weight_kg" value={vehicleForm.unladen_weight_kg} onChange={handleVehicleChange} placeholder="1850" required />
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Motorcycle purpose */}
+                                    {currentVehicleType?.requiresSeats && (
+                                        <div className="form-group"><label>Passenger Seats</label><input type="number" name="passenger_seats" value={vehicleForm.passenger_seats} onChange={handleVehicleChange} placeholder="25" required /></div>
+                                    )}
+
                                     {vehicleForm.vehicle_type === 'motorcycle' && (
                                         <div className="form-group">
                                             <label>Motorcycle Purpose</label>
                                             <div className="toggle-group">
-                                                <label className={`toggle-option ${vehicleForm.motorcycle_purpose === 'leisure' ? 'active' : ''}`}>
-                                                    <input
-                                                        type="radio"
-                                                        name="motorcycle_purpose"
-                                                        value="leisure"
-                                                        checked={vehicleForm.motorcycle_purpose === 'leisure'}
-                                                        onChange={handleVehicleChange}
-                                                    />
-                                                    🏍️ Leisure
-                                                </label>
-                                                <label className={`toggle-option ${vehicleForm.motorcycle_purpose === 'goods' ? 'active' : ''}`}>
-                                                    <input
-                                                        type="radio"
-                                                        name="motorcycle_purpose"
-                                                        value="goods"
-                                                        checked={vehicleForm.motorcycle_purpose === 'goods'}
-                                                        onChange={handleVehicleChange}
-                                                    />
-                                                    📦 Goods Transport
-                                                </label>
+                                                <label className={'toggle-option ' + (vehicleForm.motorcycle_purpose === 'leisure' ? 'active' : '')}><input type="radio" name="motorcycle_purpose" value="leisure" checked={vehicleForm.motorcycle_purpose === 'leisure'} onChange={handleVehicleChange} />🏍️ Leisure</label>
+                                                <label className={'toggle-option ' + (vehicleForm.motorcycle_purpose === 'goods' ? 'active' : '')}><input type="radio" name="motorcycle_purpose" value="goods" checked={vehicleForm.motorcycle_purpose === 'goods'} onChange={handleVehicleChange} />📦 Goods</label>
                                             </div>
                                         </div>
                                     )}
 
-                                    {/* New/Used and Franchise toggles */}
+                                    <div className="form-group">
+                                        <label>Vehicle Shipping Method</label>
+                                        <div className="toggle-group">
+                                            {VEHICLE_SHIPPING.map(m => (
+                                                <label key={m.id} className={'toggle-option ' + (vehicleForm.vehicle_shipping_method === m.id ? 'active' : '')}><input type="radio" name="vehicle_shipping_method" value={m.id} checked={vehicleForm.vehicle_shipping_method === m.id} onChange={handleVehicleChange} />{m.icon} {m.name}</label>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     <div className="form-row">
                                         <div className="form-group">
                                             <label>Vehicle Age</label>
                                             <div className="toggle-group">
-                                                <label className={`toggle-option ${vehicleForm.is_new ? 'active' : ''}`}>
-                                                    <input
-                                                        type="radio"
-                                                        name="is_new"
-                                                        checked={vehicleForm.is_new}
-                                                        onChange={() => setVehicleForm(prev => ({ ...prev, is_new: true }))}
-                                                    />
-                                                    ✨ New (≤3 yrs)
-                                                </label>
-                                                <label className={`toggle-option ${!vehicleForm.is_new ? 'active' : ''}`}>
-                                                    <input
-                                                        type="radio"
-                                                        name="is_new"
-                                                        checked={!vehicleForm.is_new}
-                                                        onChange={() => setVehicleForm(prev => ({ ...prev, is_new: false }))}
-                                                    />
-                                                    📅 Used (>3 yrs)
-                                                </label>
+                                                <label className={'toggle-option ' + (vehicleForm.is_new ? 'active' : '')}><input type="radio" checked={vehicleForm.is_new} onChange={() => setVehicleForm(p => ({ ...p, is_new: true }))} />✨ New (≤3 yrs)</label>
+                                                <label className={'toggle-option ' + (!vehicleForm.is_new ? 'active' : '')}><input type="radio" checked={!vehicleForm.is_new} onChange={() => setVehicleForm(p => ({ ...p, is_new: false }))} />📅 Used (>3 yrs)</label>
                                             </div>
                                         </div>
-
                                         {vehicleForm.vehicle_type === 'bus' && (
                                             <div className="form-group">
                                                 <label>Importer Type</label>
                                                 <div className="toggle-group">
-                                                    <label className={`toggle-option ${!vehicleForm.is_franchise ? 'active' : ''}`}>
-                                                        <input
-                                                            type="radio"
-                                                            checked={!vehicleForm.is_franchise}
-                                                            onChange={() => setVehicleForm(prev => ({ ...prev, is_franchise: false }))}
-                                                        />
-                                                        👤 Individual
-                                                    </label>
-                                                    <label className={`toggle-option ${vehicleForm.is_franchise ? 'active' : ''}`}>
-                                                        <input
-                                                            type="radio"
-                                                            checked={vehicleForm.is_franchise}
-                                                            onChange={() => setVehicleForm(prev => ({ ...prev, is_franchise: true }))}
-                                                        />
-                                                        🚌 Franchise Holder
-                                                    </label>
+                                                    <label className={'toggle-option ' + (!vehicleForm.is_franchise ? 'active' : '')}><input type="radio" checked={!vehicleForm.is_franchise} onChange={() => setVehicleForm(p => ({ ...p, is_franchise: false }))} />👤 Individual</label>
+                                                    <label className={'toggle-option ' + (vehicleForm.is_franchise ? 'active' : '')}><input type="radio" checked={vehicleForm.is_franchise} onChange={() => setVehicleForm(p => ({ ...p, is_franchise: true }))} />🚌 Franchise</label>
                                                 </div>
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Info boxes */}
-                                    {vehicleForm.vehicle_type === 'electric' && (
-                                        <div className="info-box">
-                                            <span>⚡</span>
-                                            <div>
-                                                <strong>Electric Vehicle Incentives:</strong> New EVs (≤3 years) enjoy just 11% aggregate duty with 0% GCT!
-                                            </div>
-                                        </div>
-                                    )}
+                                    {vehicleForm.vehicle_type === 'electric' && <div className="info-box"><span>⚡</span><div><strong>EV Incentives:</strong> New EVs enjoy just 11% aggregate duty with 0% GCT!</div></div>}
+                                    {vehicleForm.vehicle_type === 'hybrid' && <div className="info-box"><span>🔋</span><div><strong>Hybrid Incentive:</strong> 0% SCTA - only 39% aggregate duty.</div></div>}
 
-                                    {vehicleForm.vehicle_type === 'hybrid' && (
-                                        <div className="info-box">
-                                            <span>🔋</span>
-                                            <div>
-                                                <strong>Hybrid Incentive:</strong> Hybrid vehicles get 0% SCTA - only 39% aggregate duty.
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <button type="submit" className="btn btn-primary" disabled={loading}>
-                                        {loading ? 'Calculating...' : '📊 Calculate Import Cost'}
-                                    </button>
-
+                                    <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Calculating...' : '📊 Calculate Import Cost'}</button>
                                     {error && <div className="error-box"><strong>Error:</strong> {error}</div>}
                                 </form>
                             ) : (
-                                /* Goods Form */
                                 <form onSubmit={handleGoodsSubmit} className="form-grid">
+                                    <div className="form-group">
+                                        <label>Shipping From</label>
+                                        <select name="origin_country" value={goodsForm.origin_country} onChange={handleGoodsChange}>
+                                            {SOURCE_COUNTRIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.name}</option>)}
+                                        </select>
+                                    </div>
                                     <div className="form-row">
                                         <div className="form-group">
                                             <label>FOB Value (USD)</label>
-                                            <div className="input-wrapper">
-                                                <span className="input-prefix">$</span>
-                                                <input
-                                                    type="number"
-                                                    name="fob_usd"
-                                                    value={goodsForm.fob_usd}
-                                                    onChange={handleGoodsChange}
-                                                    placeholder="500"
-                                                    step="0.01"
-                                                    min="0"
-                                                    required
-                                                />
-                                            </div>
+                                            <div className="input-wrapper"><span className="input-prefix">$</span><input type="number" name="fob_usd" value={goodsForm.fob_usd} onChange={handleGoodsChange} placeholder="500" required /></div>
                                         </div>
-                                        <div className="form-group">
-                                            <label>Weight (KG)</label>
-                                            <input
-                                                type="number"
-                                                name="weight_kg"
-                                                value={goodsForm.weight_kg}
-                                                onChange={handleGoodsChange}
-                                                placeholder="5"
-                                                step="0.1"
-                                                min="0.1"
-                                                required
-                                            />
-                                        </div>
+                                        <div className="form-group"><label>Weight (KG)</label><input type="number" name="weight_kg" value={goodsForm.weight_kg} onChange={handleGoodsChange} placeholder="5" step="0.1" required /></div>
                                     </div>
-
                                     <div className="form-group">
                                         <label>Product Category</label>
-                                        <select
-                                            name="category"
-                                            value={goodsForm.category}
-                                            onChange={handleGoodsChange}
-                                            required
-                                        >
-                                            {categories.map(cat => (
-                                                <option key={cat.id} value={cat.id}>
-                                                    {cat.name} — {(cat.duty_rate * 100).toFixed(0)}% duty
-                                                    {cat.sct_rate > 0 && ` + ${(cat.sct_rate * 100).toFixed(0)}% SCT`}
-                                                </option>
-                                            ))}
+                                        <select name="category" value={goodsForm.category} onChange={handleGoodsChange}>
+                                            {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name} — {(cat.duty_rate * 100).toFixed(0)}% duty{cat.sct_rate > 0 ? ' + ' + (cat.sct_rate * 100).toFixed(0) + '% SCT' : ''}</option>)}
                                         </select>
                                     </div>
-
                                     <div className="form-group">
                                         <label>Shipping Method</label>
                                         <div className="toggle-group">
-                                            <label className={`toggle-option ${goodsForm.shipping_method === 'air' ? 'active' : ''}`}>
-                                                <input
-                                                    type="radio"
-                                                    name="shipping_method"
-                                                    value="air"
-                                                    checked={goodsForm.shipping_method === 'air'}
-                                                    onChange={handleGoodsChange}
-                                                />
-                                                ✈️ Air Freight
-                                            </label>
-                                            <label className={`toggle-option ${goodsForm.shipping_method === 'sea' ? 'active' : ''}`}>
-                                                <input
-                                                    type="radio"
-                                                    name="shipping_method"
-                                                    value="sea"
-                                                    checked={goodsForm.shipping_method === 'sea'}
-                                                    onChange={handleGoodsChange}
-                                                />
-                                                🚢 Sea Freight
-                                            </label>
+                                            <label className={'toggle-option ' + (goodsForm.shipping_method === 'air' ? 'active' : '')}><input type="radio" name="shipping_method" value="air" checked={goodsForm.shipping_method === 'air'} onChange={handleGoodsChange} />✈️ Air Freight</label>
+                                            <label className={'toggle-option ' + (goodsForm.shipping_method === 'sea' ? 'active' : '')}><input type="radio" name="shipping_method" value="sea" checked={goodsForm.shipping_method === 'sea'} onChange={handleGoodsChange} />🚢 Sea Freight</label>
                                         </div>
                                     </div>
-
-                                    <button type="submit" className="btn btn-primary" disabled={loading}>
-                                        {loading ? 'Calculating...' : '📊 Calculate Import Cost'}
-                                    </button>
-
+                                    <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Calculating...' : '📊 Calculate Import Cost'}</button>
                                     {error && <div className="error-box"><strong>Error:</strong> {error}</div>}
                                 </form>
                             )}
                         </div>
 
-                        {/* Results Panel */}
                         <div className="card">
-                            <div className="card-header">
-                                <h2 className="card-title">📊 Cost Breakdown</h2>
-                            </div>
-
-                            {loading ? (
-                                <div className="empty-state">
-                                    <div className="spinner"></div>
-                                    <p>Calculating costs...</p>
-                                </div>
-                            ) : result ? (
+                            <div className="card-header"><h2 className="card-title">📊 Cost Breakdown</h2></div>
+                            {loading ? <div className="empty-state"><div className="spinner"></div><p>Calculating costs...</p></div> : result ? (
                                 <>
-                                    {result.is_de_minimis && (
-                                        <div className="info-box">
-                                            <span>✓</span>
-                                            <div><strong>De Minimis Exemption Applied!</strong> Items under $100 USD are duty-free.</div>
-                                        </div>
-                                    )}
-
-                                    {/* Base Costs */}
+                                    {result.is_de_minimis && <div className="info-box"><span>✓</span><div><strong>De Minimis Exemption!</strong> Items under $100 USD are duty-free.</div></div>}
                                     <div className="results-section">
                                         <div className="section-title">Base Costs</div>
-                                        <div className="result-line">
-                                            <span className="result-label">FOB Value</span>
-                                            <span className="result-value">{formatCurrency(result.fob_jmd)}</span>
-                                        </div>
-                                        <div className="result-line">
-                                            <span className="result-label">Freight</span>
-                                            <span className="result-value">{formatCurrency(result.freight_jmd)}</span>
-                                        </div>
-                                        <div className="result-line">
-                                            <span className="result-label">Insurance (1%)</span>
-                                            <span className="result-value">{formatCurrency(result.insurance_jmd)}</span>
-                                        </div>
-                                        <div className="result-line">
-                                            <span className="result-label"><strong>CIF Total</strong></span>
-                                            <span className="result-value"><strong>{formatCurrency(result.cif_jmd)}</strong></span>
-                                        </div>
+                                        <div className="result-line"><span className="result-label">FOB Value</span><span className="result-value">{formatCurrency(result.fob_jmd)}</span></div>
+                                        <div className="result-line"><span className="result-label">Freight {result.origin_country && <span className="rate-tag">from {result.origin_country}</span>}</span><span className="result-value">{formatCurrency(result.freight_jmd)}</span></div>
+                                        {result.freight_breakdown && (
+                                            <div className="freight-breakdown">
+                                                <div className="freight-breakdown-title">{result.shipping_method === 'roro' ? '🚢 RoRo' : result.shipping_method?.includes('container') ? '📦 Container' : result.shipping_method === 'air' ? '✈️ Air' : '🚢 Sea'} Breakdown</div>
+                                                {result.freight_breakdown.base_freight !== undefined && <div className="freight-item"><span>Base freight</span><span>${result.freight_breakdown.base_freight}</span></div>}
+                                                {result.freight_breakdown.terminal_handling && <div className="freight-item"><span>Terminal handling</span><span>${result.freight_breakdown.terminal_handling}</span></div>}
+                                                {result.freight_breakdown.documentation && <div className="freight-item"><span>Documentation</span><span>${result.freight_breakdown.documentation}</span></div>}
+                                                {result.freight_breakdown.fuel_surcharge && <div className="freight-item"><span>Fuel surcharge</span><span>${result.freight_breakdown.fuel_surcharge}</span></div>}
+                                                {result.freight_breakdown.handling_fee && <div className="freight-item"><span>Handling</span><span>${result.freight_breakdown.handling_fee}</span></div>}
+                                            </div>
+                                        )}
+                                        <div className="result-line"><span className="result-label">Insurance</span><span className="result-value">{formatCurrency(result.insurance_jmd)}</span></div>
+                                        <div className="result-line"><span className="result-label"><strong>CIF Total</strong></span><span className="result-value"><strong>{formatCurrency(result.cif_jmd)}</strong></span></div>
                                     </div>
-
-                                    {/* Duties & Taxes */}
                                     {!result.is_de_minimis && (
                                         <>
                                             <div className="results-section">
                                                 <div className="section-title">Duties & Taxes</div>
-                                                <div className="result-line">
-                                                    <span className="result-label">
-                                                        Import Duty
-                                                        <span className="rate-tag">{(result.duty_rate * 100).toFixed(0)}%</span>
-                                                    </span>
-                                                    <span className="result-value">{formatCurrency(result.duty_jmd)}</span>
-                                                </div>
-                                                {result.scta_jmd > 0 && (
-                                                    <div className="result-line">
-                                                        <span className="result-label">
-                                                            SCTA (Excise)
-                                                            <span className="rate-tag">{(result.scta_rate * 100).toFixed(0)}%</span>
-                                                        </span>
-                                                        <span className="result-value">{formatCurrency(result.scta_jmd)}</span>
-                                                    </div>
-                                                )}
-                                                <div className="result-line">
-                                                    <span className="result-label">
-                                                        GCT
-                                                        <span className="rate-tag">{(result.gct_rate * 100).toFixed(0)}%</span>
-                                                    </span>
-                                                    <span className="result-value">{formatCurrency(result.gct_jmd)}</span>
-                                                </div>
+                                                <div className="result-line"><span className="result-label">Import Duty <span className="rate-tag">{(result.duty_rate * 100).toFixed(0)}%</span></span><span className="result-value">{formatCurrency(result.duty_jmd)}</span></div>
+                                                {result.scta_jmd > 0 && <div className="result-line"><span className="result-label">SCTA <span className="rate-tag">{(result.scta_rate * 100).toFixed(0)}%</span></span><span className="result-value">{formatCurrency(result.scta_jmd)}</span></div>}
+                                                <div className="result-line"><span className="result-label">GCT <span className="rate-tag">{(result.gct_rate * 100).toFixed(0)}%</span></span><span className="result-value">{formatCurrency(result.gct_jmd)}</span></div>
                                             </div>
-
                                             <div className="results-section">
                                                 <div className="section-title">Administrative Fees</div>
-                                                <div className="result-line">
-                                                    <span className="result-label">CAF</span>
-                                                    <span className="result-value">{formatCurrency(result.caf_jmd)}</span>
-                                                </div>
-                                                <div className="result-line">
-                                                    <span className="result-label">SCF</span>
-                                                    <span className="result-value">{formatCurrency(result.scf_jmd)}</span>
-                                                </div>
-                                                <div className="result-line">
-                                                    <span className="result-label">Environmental Levy</span>
-                                                    <span className="result-value">{formatCurrency(result.epl_jmd)}</span>
-                                                </div>
-                                                <div className="result-line">
-                                                    <span className="result-label">Stamp Duty</span>
-                                                    <span className="result-value">{formatCurrency(result.stamp_duty_jmd)}</span>
-                                                </div>
+                                                <div className="result-line"><span className="result-label">CAF</span><span className="result-value">{formatCurrency(result.caf_jmd)}</span></div>
+                                                <div className="result-line"><span className="result-label">SCF</span><span className="result-value">{formatCurrency(result.scf_jmd)}</span></div>
+                                                <div className="result-line"><span className="result-label">Environmental Levy</span><span className="result-value">{formatCurrency(result.epl_jmd)}</span></div>
+                                                <div className="result-line"><span className="result-label">Stamp Duty</span><span className="result-value">{formatCurrency(result.stamp_duty_jmd)}</span></div>
                                             </div>
                                         </>
                                     )}
-
-                                    {/* Total */}
                                     <div className="highlight-box">
                                         <div className="highlight-label">Total Landed Cost</div>
                                         <div className="highlight-amount">{formatCurrency(result.total_landed_jmd)}</div>
-                                        <div className="highlight-sub">
-                                            {formatCurrency(result.total_landed_jmd / result.exchange_rate_used, 'USD')}
-                                        </div>
-                                        {result.aggregate_rate && (
-                                            <div className="aggregate-badge">
-                                                📊 Aggregate Rate: {(result.aggregate_rate * 100).toFixed(0)}%
-                                            </div>
-                                        )}
-                                        {effectiveRate && !result.aggregate_rate && (
-                                            <div className="aggregate-badge">
-                                                📊 Effective Rate: {effectiveRate}%
-                                            </div>
-                                        )}
+                                        <div className="highlight-sub">{formatCurrency(result.total_landed_jmd / result.exchange_rate_used, 'USD')}</div>
+                                        {result.aggregate_rate && <div className="aggregate-badge">📊 Aggregate Rate: {(result.aggregate_rate * 100).toFixed(0)}%</div>}
                                     </div>
                                 </>
-                            ) : (
-                                <div className="empty-state">
-                                    <div className="empty-icon">📋</div>
-                                    <p>Enter {activeTab === 'vehicle' ? 'vehicle' : 'shipment'} details to see cost breakdown</p>
-                                </div>
-                            )}
+                            ) : <div className="empty-state"><div className="empty-icon">📋</div><p>Enter {activeTab === 'vehicle' ? 'vehicle' : 'shipment'} details to see cost breakdown</p></div>}
                         </div>
                     </div>
 
                     <footer className="footer">
-                        <p>
-                            <strong>Exchange Rate:</strong> 155.0 JMD/USD • 
-                            <strong> CAF:</strong> J$63,250 (new) / J$66,125 (used) •
-                            Updated February 2025
-                        </p>
-                        <p style={{ marginTop: '0.5rem' }}>
-                            For official rates, visit{' '}
-                            <a href="https://www.jacustoms.gov.jm" target="_blank" rel="noopener noreferrer">
-                                Jamaica Customs Agency
-                            </a>
-                        </p>
+                        <p><strong>Exchange Rate:</strong> 155.0 JMD/USD • <strong>CAF:</strong> J$63,250 (new) / J$66,125 (used) • Updated Feb 2025</p>
+                        <p style={{ marginTop: '0.5rem' }}>Freight rates are estimates based on 2025 industry averages. Actual rates may vary.</p>
+                        <p style={{ marginTop: '0.5rem' }}>For official rates, visit <a href="https://www.jacustoms.gov.jm" target="_blank" rel="noopener noreferrer">Jamaica Customs Agency</a></p>
                     </footer>
                 </div>
             );
         }
-
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
