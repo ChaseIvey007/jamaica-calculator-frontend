@@ -88,12 +88,24 @@
         .freight-breakdown { background: var(--surface-alt); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-top: 0.5rem; font-size: 0.8125rem; }
         .freight-breakdown-title { font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; }
         .freight-item { display: flex; justify-content: space-between; padding: 0.25rem 0; color: var(--text-tertiary); }
+        .freight-subtotal { display: flex; justify-content: space-between; padding: 0.375rem 0; color: var(--text-primary); font-weight: 600; border-top: 1px solid var(--border); margin-top: 0.25rem; }
+        /* Vehicle search autocomplete */
+        .search-wrapper { position: relative; }
+        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border: 1.5px solid var(--primary); border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); max-height: 220px; overflow-y: auto; z-index: 50; box-shadow: var(--shadow-md); }
+        .search-result-item { padding: 0.625rem 1rem; cursor: pointer; font-size: 0.875rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background: rgba(0, 155, 58, 0.05); }
+        .search-result-name { font-weight: 500; color: var(--text-primary); }
+        .search-result-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-tertiary); }
+        .selected-vehicle-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 155, 58, 0.08); border: 1px solid rgba(0, 155, 58, 0.2); color: var(--primary-dark); padding: 0.375rem 0.75rem; border-radius: 100px; font-size: 0.8125rem; font-weight: 500; margin-top: 0.25rem; }
+        .selected-vehicle-tag button { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 0.25rem; }
+        .transit-badge { display: inline-flex; align-items: center; gap: 0.375rem; margin-top: 0.75rem; padding: 0.5rem 0.875rem; background: rgba(0, 155, 58, 0.08); border-radius: 100px; font-size: 0.8125rem; font-weight: 500; color: var(--primary-dark); }
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef, useCallback } = React;
         const API_URL = 'https://web-production-c0bd0.up.railway.app';
 
         const SOURCE_COUNTRIES = [
@@ -130,7 +142,22 @@
             { id: 'container_40ft', name: '40ft Container', icon: '📦' }
         ];
 
+        const INSURANCE_OPTIONS = [
+            { id: 'none', name: 'None', icon: '✕' },
+            { id: 'total_loss', name: 'Total Loss (1%)', icon: '🛡️' },
+            { id: 'comprehensive', name: 'Full Cover (1.5%)', icon: '🛡️' }
+        ];
+
         const formatCurrency = (v, c = 'JMD') => c + ' $' + new Intl.NumberFormat('en-JM', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
+
+        function useDebounce(value, delay) {
+            const [debounced, setDebounced] = useState(value);
+            useEffect(() => {
+                const t = setTimeout(() => setDebounced(value), delay);
+                return () => clearTimeout(t);
+            }, [value, delay]);
+            return debounced;
+        }
 
         function App() {
             const [activeTab, setActiveTab] = useState('vehicle');
@@ -138,24 +165,76 @@
             const [error, setError] = useState(null);
             const [result, setResult] = useState(null);
             const [categories, setCategories] = useState([]);
+            const [countryPorts, setCountryPorts] = useState({});
 
             const [vehicleForm, setVehicleForm] = useState({
                 fob_usd: '', origin_country: 'US', vehicle_type: 'motor_car', fuel_type: 'gas',
                 engine_cc: '', unladen_weight_kg: '', passenger_seats: '', is_new: true,
-                is_franchise: false, motorcycle_purpose: 'leisure', vehicle_shipping_method: 'roro'
+                is_franchise: false, motorcycle_purpose: 'leisure', vehicle_shipping_method: 'roro',
+                make_model: '', departure_port: '', insurance_type: 'total_loss',
             });
 
             const [goodsForm, setGoodsForm] = useState({
                 fob_usd: '', weight_kg: '', origin_country: 'US', category: 'general', shipping_method: 'air'
             });
 
+            // Vehicle search state
+            const [searchQuery, setSearchQuery] = useState('');
+            const [searchResults, setSearchResults] = useState([]);
+            const [showSearchResults, setShowSearchResults] = useState(false);
+            const [selectedVehicle, setSelectedVehicle] = useState(null);
+            const searchRef = useRef(null);
+            const debouncedSearch = useDebounce(searchQuery, 300);
+
             useEffect(() => {
                 fetch(API_URL + '/categories').then(r => r.json()).then(d => setCategories(d.categories || [])).catch(console.error);
+                fetch(API_URL + '/source-countries').then(r => r.json()).then(d => {
+                    const portMap = {};
+                    (d.countries || []).forEach(c => { portMap[c.code] = c.ports || []; });
+                    setCountryPorts(portMap);
+                }).catch(console.error);
             }, []);
+
+            // Vehicle search
+            useEffect(() => {
+                if (debouncedSearch.length >= 2) {
+                    fetch(API_URL + '/vehicle-search?q=' + encodeURIComponent(debouncedSearch))
+                        .then(r => r.json())
+                        .then(d => { setSearchResults(d.results || []); setShowSearchResults(true); })
+                        .catch(() => setSearchResults([]));
+                } else {
+                    setSearchResults([]);
+                    setShowSearchResults(false);
+                }
+            }, [debouncedSearch]);
+
+            // Close search results on outside click
+            useEffect(() => {
+                const handleClick = (e) => { if (searchRef.current && !searchRef.current.contains(e.target)) setShowSearchResults(false); };
+                document.addEventListener('mousedown', handleClick);
+                return () => document.removeEventListener('mousedown', handleClick);
+            }, []);
+
+            const selectVehicle = (v) => {
+                setSelectedVehicle(v);
+                setSearchQuery('');
+                setShowSearchResults(false);
+                setVehicleForm(p => ({ ...p, make_model: v.name }));
+            };
+
+            const clearSelectedVehicle = () => {
+                setSelectedVehicle(null);
+                setVehicleForm(p => ({ ...p, make_model: '' }));
+            };
 
             const handleVehicleChange = (e) => {
                 const { name, value } = e.target;
-                setVehicleForm(p => ({ ...p, [name]: value }));
+                setVehicleForm(p => {
+                    const updated = { ...p, [name]: value };
+                    // Reset departure_port when country changes
+                    if (name === 'origin_country') updated.departure_port = '';
+                    return updated;
+                });
             };
 
             const handleGoodsChange = (e) => {
@@ -173,8 +252,15 @@
                     category: 'vehicle', shipping_method: 'sea',
                     origin_country: vehicleForm.origin_country, vehicle_type: vehicleForm.vehicle_type,
                     fuel_type: vehicleForm.fuel_type, is_new: vehicleForm.is_new,
-                    is_franchise: vehicleForm.is_franchise, vehicle_shipping_method: vehicleForm.vehicle_shipping_method
+                    is_franchise: vehicleForm.is_franchise, vehicle_shipping_method: vehicleForm.vehicle_shipping_method,
+                    insurance_type: vehicleForm.insurance_type || 'total_loss',
                 };
+                if (vehicleForm.make_model) payload.make_model = vehicleForm.make_model;
+                if (vehicleForm.departure_port) payload.departure_port = vehicleForm.departure_port;
+                if (selectedVehicle) {
+                    payload.vehicle_m3 = selectedVehicle.m3;
+                    payload.vehicle_height_m = selectedVehicle.height;
+                }
                 if (vehicleForm.engine_cc) payload.engine_cc = parseInt(vehicleForm.engine_cc);
                 if (vType?.requiresSeats && vehicleForm.passenger_seats) payload.passenger_seats = parseInt(vehicleForm.passenger_seats);
                 if (vehicleForm.vehicle_type === 'motorcycle') payload.motorcycle_purpose = vehicleForm.motorcycle_purpose;
@@ -201,6 +287,8 @@
             };
 
             const currentVehicleType = VEHICLE_TYPES.find(v => v.id === vehicleForm.vehicle_type);
+            const currentPorts = countryPorts[vehicleForm.origin_country] || [];
+            const fb = result?.freight_breakdown || {};
 
             return (
                 <div className="app-container">
@@ -233,6 +321,31 @@
                                         </div>
                                     </div>
 
+                                    {/* Vehicle Make/Model Search */}
+                                    <div className="form-group">
+                                        <label>Make & Model <span style={{fontWeight:400,textTransform:'none',letterSpacing:0}}>(optional — auto-fills M3)</span></label>
+                                        {selectedVehicle ? (
+                                            <div className="selected-vehicle-tag">
+                                                🚘 {selectedVehicle.name} — {selectedVehicle.m3} m³ • {selectedVehicle.category_label}
+                                                <button type="button" onClick={clearSelectedVehicle}>×</button>
+                                            </div>
+                                        ) : (
+                                            <div className="search-wrapper" ref={searchRef}>
+                                                <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onFocus={() => searchResults.length && setShowSearchResults(true)} placeholder="e.g. Toyota Corolla, Honda CR-V..." autoComplete="off" />
+                                                {showSearchResults && searchResults.length > 0 && (
+                                                    <div className="search-results">
+                                                        {searchResults.map((v, i) => (
+                                                            <div key={i} className="search-result-item" onClick={() => selectVehicle(v)}>
+                                                                <span className="search-result-name">{v.name}</span>
+                                                                <span className="search-result-meta">{v.m3} m³ • {v.category_label}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
                                     <div className="form-row">
                                         <div className="form-group">
                                             <label>Shipping From</label>
@@ -248,6 +361,19 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    {/* Departure Port (dynamic based on country) */}
+                                    {currentPorts.length > 0 && (
+                                        <div className="form-group">
+                                            <label>Departure Port <span style={{fontWeight:400,textTransform:'none',letterSpacing:0}}>(optional)</span></label>
+                                            <select name="departure_port" value={vehicleForm.departure_port} onChange={handleVehicleChange}>
+                                                <option value="">Any available port</option>
+                                                {currentPorts.map(p => (
+                                                    <option key={p.code} value={p.code}>{p.name} ({p.transit_days.min}-{p.transit_days.max} days)</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )}
 
                                     {!['hybrid', 'electric', 'motorcycle'].includes(vehicleForm.vehicle_type) && (
                                         <div className="form-group">
@@ -293,6 +419,16 @@
                                         <div className="toggle-group">
                                             {VEHICLE_SHIPPING.map(m => (
                                                 <label key={m.id} className={'toggle-option ' + (vehicleForm.vehicle_shipping_method === m.id ? 'active' : '')}><input type="radio" name="vehicle_shipping_method" value={m.id} checked={vehicleForm.vehicle_shipping_method === m.id} onChange={handleVehicleChange} />{m.icon} {m.name}</label>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Marine Insurance Type */}
+                                    <div className="form-group">
+                                        <label>Marine Insurance</label>
+                                        <div className="toggle-group">
+                                            {INSURANCE_OPTIONS.map(ins => (
+                                                <label key={ins.id} className={'toggle-option ' + (vehicleForm.insurance_type === ins.id ? 'active' : '')}><input type="radio" name="insurance_type" value={ins.id} checked={vehicleForm.insurance_type === ins.id} onChange={handleVehicleChange} />{ins.icon} {ins.name}</label>
                                             ))}
                                         </div>
                                     </div>
@@ -365,16 +501,45 @@
                                         <div className="section-title">Base Costs</div>
                                         <div className="result-line"><span className="result-label">FOB Value</span><span className="result-value">{formatCurrency(result.fob_jmd)}</span></div>
                                         <div className="result-line"><span className="result-label">Freight {result.origin_country && <span className="rate-tag">from {result.origin_country}</span>}</span><span className="result-value">{formatCurrency(result.freight_jmd)}</span></div>
-                                        {result.freight_breakdown && (
+
+                                        {/* Enhanced freight breakdown */}
+                                        {fb && fb.calculation_method && (
                                             <div className="freight-breakdown">
-                                                <div className="freight-breakdown-title">{result.shipping_method === 'roro' ? '🚢 RoRo' : result.shipping_method?.includes('container') ? '📦 Container' : result.shipping_method === 'air' ? '✈️ Air' : '🚢 Sea'} Breakdown</div>
-                                                {result.freight_breakdown.base_freight !== undefined && <div className="freight-item"><span>Base freight</span><span>${result.freight_breakdown.base_freight}</span></div>}
-                                                {result.freight_breakdown.terminal_handling && <div className="freight-item"><span>Terminal handling</span><span>${result.freight_breakdown.terminal_handling}</span></div>}
-                                                {result.freight_breakdown.documentation && <div className="freight-item"><span>Documentation</span><span>${result.freight_breakdown.documentation}</span></div>}
-                                                {result.freight_breakdown.fuel_surcharge && <div className="freight-item"><span>Fuel surcharge</span><span>${result.freight_breakdown.fuel_surcharge}</span></div>}
-                                                {result.freight_breakdown.handling_fee && <div className="freight-item"><span>Handling</span><span>${result.freight_breakdown.handling_fee}</span></div>}
+                                                <div className="freight-breakdown-title">
+                                                    {result.shipping_method === 'roro' ? '🚢 RoRo' : result.shipping_method?.includes('container') ? '📦 Container' : result.shipping_method === 'air' ? '✈️ Air' : '🚢 Sea'} — {fb.calculation_method}
+                                                </div>
+                                                {fb.vehicle_name && fb.vehicle_m3 && <div className="freight-item" style={{color:'var(--primary-dark)',fontWeight:500}}><span>🚘 {fb.vehicle_name}</span><span>{fb.vehicle_m3} m³{fb.vehicle_height_m ? ' • ' + fb.vehicle_height_m + 'm tall' : ''}</span></div>}
+                                                <div style={{fontSize:'0.75rem',fontWeight:600,color:'var(--text-secondary)',margin:'0.5rem 0 0.25rem',textTransform:'uppercase',letterSpacing:'0.03em'}}>Origin Charges</div>
+                                                {fb.base_freight > 0 && <div className="freight-item"><span>Base freight</span><span>${fb.base_freight}</span></div>}
+                                                {fb.height_surcharge > 0 && <div className="freight-item"><span>Height surcharge</span><span>${fb.height_surcharge}</span></div>}
+                                                {fb.port_adjustment !== 0 && fb.port_adjustment !== undefined && <div className="freight-item"><span>Port adjustment</span><span>{fb.port_adjustment >= 0 ? '+' : ''}${fb.port_adjustment}</span></div>}
+                                                {fb.bunker_adjustment_factor > 0 && <div className="freight-item"><span>Bunker adj. (BAF)</span><span>${fb.bunker_adjustment_factor}</span></div>}
+                                                {fb.bill_of_lading > 0 && <div className="freight-item"><span>Bill of Lading</span><span>${fb.bill_of_lading}</span></div>}
+                                                {fb.origin_terminal_handling > 0 && <div className="freight-item"><span>Origin THC</span><span>${fb.origin_terminal_handling}</span></div>}
+                                                {fb.low_sulphur_surcharge > 0 && <div className="freight-item"><span>Low sulphur surcharge</span><span>${fb.low_sulphur_surcharge}</span></div>}
+                                                {fb.pre_shipment_inspection > 0 && <div className="freight-item"><span>Pre-shipment inspection (PSI)</span><span>${fb.pre_shipment_inspection}</span></div>}
+                                                {fb.origin_subtotal > 0 && <div className="freight-subtotal"><span>Origin subtotal</span><span>${fb.origin_subtotal}</span></div>}
+                                                <div style={{fontSize:'0.75rem',fontWeight:600,color:'var(--text-secondary)',margin:'0.5rem 0 0.25rem',textTransform:'uppercase',letterSpacing:'0.03em'}}>Jamaica Destination</div>
+                                                {fb.wharfage > 0 && <div className="freight-item"><span>Wharfage</span><span>${fb.wharfage}</span></div>}
+                                                {fb.port_handling > 0 && <div className="freight-item"><span>Port handling</span><span>${fb.port_handling}</span></div>}
+                                                {fb.destination_terminal_handling > 0 && <div className="freight-item"><span>Destination THC</span><span>${fb.destination_terminal_handling}</span></div>}
+                                                {fb.destination_subtotal > 0 && <div className="freight-subtotal"><span>Destination subtotal</span><span>${fb.destination_subtotal}</span></div>}
+                                                {fb.insurance_premium > 0 && <div className="freight-item" style={{marginTop:'0.25rem'}}><span>🛡️ Insurance ({fb.insurance_type?.replace('_',' ')})</span><span>${fb.insurance_premium}</span></div>}
                                             </div>
                                         )}
+
+                                        {/* Legacy freight breakdown for non-enhanced */}
+                                        {fb && !fb.calculation_method && (
+                                            <div className="freight-breakdown">
+                                                <div className="freight-breakdown-title">{result.shipping_method === 'roro' ? '🚢 RoRo' : result.shipping_method?.includes('container') ? '📦 Container' : result.shipping_method === 'air' ? '✈️ Air' : '🚢 Sea'} Breakdown</div>
+                                                {fb.base_freight !== undefined && <div className="freight-item"><span>Base freight</span><span>${fb.base_freight}</span></div>}
+                                                {fb.terminal_handling && <div className="freight-item"><span>Terminal handling</span><span>${fb.terminal_handling}</span></div>}
+                                                {fb.documentation && <div className="freight-item"><span>Documentation</span><span>${fb.documentation}</span></div>}
+                                                {fb.fuel_surcharge && <div className="freight-item"><span>Fuel surcharge</span><span>${fb.fuel_surcharge}</span></div>}
+                                                {fb.handling_fee && <div className="freight-item"><span>Handling</span><span>${fb.handling_fee}</span></div>}
+                                            </div>
+                                        )}
+
                                         <div className="result-line"><span className="result-label">Insurance</span><span className="result-value">{formatCurrency(result.insurance_jmd)}</span></div>
                                         <div className="result-line"><span className="result-label"><strong>CIF Total</strong></span><span className="result-value"><strong>{formatCurrency(result.cif_jmd)}</strong></span></div>
                                     </div>
@@ -400,6 +565,9 @@
                                         <div className="highlight-amount">{formatCurrency(result.total_landed_jmd)}</div>
                                         <div className="highlight-sub">{formatCurrency(result.total_landed_jmd / result.exchange_rate_used, 'USD')}</div>
                                         {result.aggregate_rate && <div className="aggregate-badge">📊 Aggregate Rate: {(result.aggregate_rate * 100).toFixed(0)}%</div>}
+                                        {fb && fb.transit_days_min && fb.transit_days_max && (
+                                            <div className="transit-badge" style={{marginTop:'0.75rem',background:'rgba(254,209,0,0.12)',color:'var(--accent)'}}>⏱️ Est. Transit: {fb.transit_days_min}-{fb.transit_days_max} days (port-to-port)</div>
+                                        )}
                                     </div>
                                 </>
                             ) : <div className="empty-state"><div className="empty-icon">📋</div><p>Enter {activeTab === 'vehicle' ? 'vehicle' : 'shipment'} details to see cost breakdown</p></div>}
@@ -408,7 +576,7 @@
 
                     <footer className="footer">
                         <p><strong>Exchange Rate:</strong> 155.0 JMD/USD • <strong>CAF:</strong> J$63,250 (new) / J$66,125 (used) • Updated Feb 2025</p>
-                        <p style={{ marginTop: '0.5rem' }}>Freight rates are estimates based on 2025 industry averages. Actual rates may vary.</p>
+                        <p style={{ marginTop: '0.5rem' }}>Freight rates are estimates based on 2025 industry averages. M3-tiered rates for JP/CN/KR/AE; flat-rate for US/UK/DE/CA/PA/TT.</p>
                         <p style={{ marginTop: '0.5rem' }}>For official rates, visit <a href="https://www.jacustoms.gov.jm" target="_blank" rel="noopener noreferrer">Jamaica Customs Agency</a></p>
                     </footer>
                 </div>
