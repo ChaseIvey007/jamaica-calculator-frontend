@@ -13,3 +13,39 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wp-login.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/*.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/xmlrpc.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/.env"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wordpress"
+  to = "/404"
+  status = 410
+  force = true 
