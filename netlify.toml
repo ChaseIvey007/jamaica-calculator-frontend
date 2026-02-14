@@ -49,3 +49,15 @@
   to = "/404"
   status = 410
   force = true 
+
+[[redirects]]
+  from = "/wp-admin/setup-config.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wordpress/wp-admin/setup-config.php"
+  to = "/404"
+  status = 410
+  force = true
