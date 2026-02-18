@@ -13,3 +13,74 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "/*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+
+# Security redirects - block common attack vectors
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wp-login.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/*.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/xmlrpc.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/.env"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wordpress"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wp-admin/setup-config.php"
+  to = "/404"
+  status = 410
+  force = true
+
+[[redirects]]
+  from = "/wordpress/wp-admin/setup-config.php"
+  to = "/404"
+  status = 410
+  force = true
