@@ -61,3 +61,9 @@
   to = "/404"
   status = 410
   force = true
+
+[[redirects]]
+  from = "/ads.txt"
+  to = "/ads.txt"
+  status = 200
+  force = true
