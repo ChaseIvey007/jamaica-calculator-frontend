@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="c"><rect width="64" height="64" rx="12"/></clipPath>
+  </defs>
+  <g clip-path="url(#c)">
+    <rect width="64" height="64" rx="12" fill="#009B3A"/>
+    <rect width="64" height="6" fill="#FED100"/>
+    <text x="32" y="30" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="22" fill="white">TC</text>
+    <text x="32" y="52" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="800" font-size="17" fill="#FED100">JA</text>
+  </g>
+</svg>
